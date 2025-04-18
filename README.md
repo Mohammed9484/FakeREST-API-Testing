@@ -72,7 +72,7 @@ newman run postman/FakeREST.postman_collection.json \
 The collection includes tests for:
 
 - 🗂️ **Activities**
-- 👤 **Authors****
+- 👤 **Authors**
 - 📚 **Books**
 - 📷 **Cover Photos**
 - 👤 **Users**
@@ -93,7 +93,5 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ---
 
-## 📝 License
 
-This project is licensed under the MIT License.
 
