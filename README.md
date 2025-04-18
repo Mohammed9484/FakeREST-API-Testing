@@ -71,9 +71,11 @@ newman run postman/FakeREST.postman_collection.json \
 
 The collection includes tests for:
 
-- 📚 **Books**: Create, Read, Update, Delete
-- 👤 **Authors**: CRUD operations
-- 🗂️ **Activities & Users**: Basic validations and data integrity
+- 🗂️ **Activities**
+- 👤 **Authors****
+- 📚 **Books**
+- 📷 **Cover Photos**
+- 👤 **Users**
 
 ---
 
