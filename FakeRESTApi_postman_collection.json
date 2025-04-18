@@ -1,0 +1,2140 @@
+{
+	"info": {
+		"_postman_id": "a96e9b1c-738b-446f-9950-f1a55eab122d",
+		"name": "FakeRESTApi.Web V1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39243814",
+		"_collection_link": "https://team33-6337.postman.co/workspace/Project~ad086ab4-b1cf-4201-ae9b-de21992be124/collection/39243814-a96e9b1c-738b-446f-9950-f1a55eab122d?action=share&source=collection_link&creator=39243814"
+	},
+	"item": [
+		{
+			"name": "Activities",
+			"item": [
+				{
+					"name": "getAllActivities",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"GET\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(600);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(pm.response.json()).to.not.be.empty;\r",
+									"});\r",
+									"//Verify that response has 30 items\r",
+									"pm.test(\"Response has 30 items\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.lengthOf(30);\r",
+									"});\r",
+									"//Verify that id is not null\r",
+									"pm.test(\"Items have non-null ID\", function () {\r",
+									"    pm.response.json().forEach(item => {\r",
+									"        pm.expect(item.id).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"// Verify that title is not empty or null\r",
+									"const response = pm.response.json();\r",
+									"pm.test(\"Items title is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.title).to.be.a('string').and.to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Verify that 'completed' is true or false\r",
+									"pm.test(\"Items 'completed' is true or false\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.completed === true || item.completed === false).to.be.true;\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/Activities",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postNewActivity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is POST\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.request.method).to.equal(\"POST\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"\r",
+									"// Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(pm.response.json()).to.not.be.empty;\r",
+									"});\r",
+									"let body = request.data;\r",
+									"let jsonData = JSON.parse(body);\r",
+									"pm.environment.set(\"activityId\", jsonData.id);\r",
+									"pm.environment.set(\"activityTitle\", jsonData.title);\r",
+									"pm.environment.set(\"activityDueDate\", jsonData.dueDate);\r",
+									"pm.environment.set(\"activityCompleted\", jsonData.completed);\r",
+									"\r",
+									"// Verify the response body contains the correct data\r",
+									"pm.test(\"Activity id is correct\", function () {\r",
+									"    pm.expect(response.id).to.equal(pm.environment.get(\"activityId\"));\r",
+									"});\r",
+									"pm.test(\"Activity title is correct\", function () {\r",
+									"    pm.expect(response.title).to.equal(pm.environment.get(\"activityTitle\"));\r",
+									"});\r",
+									"pm.test(\"Activity due date is correct\", function () {\r",
+									"pm.expect(response.dueDate).to.equal(pm.environment.get(\"activityDueDate\"));\r",
+									"});\r",
+									"pm.test(\"Activity completed status is correct\", function () {\r",
+									"pm.expect(response.completed).to.equal(pm.environment.get(\"activityCompleted\"));\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 55,\r\n  \"title\": \"New Activity\",\r\n  \"dueDate\": \"2025-04-15T16:28:16.354Z\",\r\n  \"completed\": true\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Activities",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getActivityById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"GET\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(600);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(pm.response.json()).to.not.be.empty;\r",
+									"});\r",
+									"//Verify that id is correct\r",
+									"pm.test(\"Item has correct ID\", function () {\r",
+									"    pm.expect(response.id).to.eql(parseInt(pm.environment.get(\"targetActivityId\")))\r",
+									"});\r",
+									"// Verify that title is not empty or null\r",
+									"pm.test(\"Items title is not empty or null\", function () {\r",
+									"    pm.expect(response.title).to.be.a('string').and.to.not.be.null\r",
+									"});\r",
+									"\r",
+									"// Verify that 'completed' is true or false\r",
+									"pm.test(\"Items 'completed' is true or false\", function () {\r",
+									"    pm.expect(response.completed === true || response.completed === false).to.be.true;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/Activities/{{targetActivityId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Activities",
+								"{{targetActivityId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editActivity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"PUT\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(pm.response.json()).to.not.be.empty;\r",
+									"});\r",
+									"let body = request.data;\r",
+									"let jsonData = JSON.parse(body);\r",
+									"pm.environment.set(\"activityId\", jsonData.id);\r",
+									"pm.environment.set(\"activityTitle\", jsonData.title);\r",
+									"pm.environment.set(\"activityDueDate\", jsonData.dueDate);\r",
+									"pm.environment.set(\"activityCompleted\", jsonData.completed);\r",
+									"\r",
+									"// Verify the response body contains the correct data\r",
+									"pm.test(\"Activity id is correct\", function () {\r",
+									"    pm.expect(response.id).to.equal(pm.environment.get(\"activityId\"));\r",
+									"});\r",
+									"pm.test(\"Activity title is correct\", function () {\r",
+									"    pm.expect(response.title).to.equal(pm.environment.get(\"activityTitle\"));\r",
+									"});\r",
+									"pm.test(\"Activity due date is correct\", function () {\r",
+									"pm.expect(response.dueDate).to.equal(pm.environment.get(\"activityDueDate\"));\r",
+									"});\r",
+									"pm.test(\"Activity completed status is correct\", function () {\r",
+									"pm.expect(response.completed).to.equal(pm.environment.get(\"activityCompleted\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 55,\r\n  \"title\": \"Edited Activity\",\r\n  \"dueDate\": \"2025-04-15T16:28:16.354Z\",\r\n  \"completed\": true\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Activities/{{targetActivityId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Activities",
+								"{{targetActivityId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteActivity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.text();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"DELETE\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Verify that body is empty\r",
+									"pm.test(\"Response body is empty\", function () {\r",
+									"    pm.expect(response).to.be.empty;\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/Activities/{{targetActivityId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Activities",
+								"{{targetActivityId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authors",
+			"item": [
+				{
+					"name": "getAllAuthors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"GET\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(pm.response.json()).to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"//Verify that id is not null\r",
+									"pm.test(\"Items have non-null ID\", function () {\r",
+									"    pm.response.json().forEach(item => {\r",
+									"        pm.expect(item.id).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"// Verify that book id is not empty or null\r",
+									"const response = pm.response.json();\r",
+									"pm.test(\"Book id is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.idBook).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"// Verify items First name and Last name is string and not empty\r",
+									"pm.test(\"Items firstName is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.firstName).to.be.a('string').and.to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									"pm.test(\"Items lastName is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.lastName).to.be.a('string').and.to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/Authors",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Authors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postNewAuthor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful PSOT request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"POST\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(pm.response.json()).to.not.be.empty;\r",
+									"});\r",
+									"let body = request.data;\r",
+									"let jsonData = JSON.parse(body);\r",
+									"pm.environment.set(\"authorId\", jsonData.id);\r",
+									"pm.environment.set(\"authorIdBook\", jsonData.idBook);\r",
+									"pm.environment.set(\"authorFirstName\", jsonData.firstName);\r",
+									"pm.environment.set(\"authorLastName\", jsonData.lastName);\r",
+									"// Verify the response body contains the correct data\r",
+									"pm.test(\"Author id is correct\", function () {\r",
+									"    pm.expect(response.id).to.equal(pm.environment.get(\"authorId\"));\r",
+									"});\r",
+									"pm.test(\"Author idBook is correct\", function () {\r",
+									"pm.expect(response.idBook).to.equal(pm.environment.get(\"authorIdBook\"));\r",
+									"});\r",
+									"pm.test(\"Author first name is correct\", function () {\r",
+									"pm.expect(response.firstName).to.equal(pm.environment.get(\"authorFirstName\"));\r",
+									"});\r",
+									"pm.test(\"Author last name is correct\", function () {\r",
+									"pm.expect(response.lastName).to.equal(pm.environment.get(\"authorLastName\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 50,\r\n  \"idBook\": 30,\r\n  \"firstName\": \"Mohammed \",\r\n  \"lastName\": \"Hasan\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Authors",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Authors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAuthorByBookId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"GET\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(response).to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"//Verify that id is not null\r",
+									"pm.test(\"Items have non-null ID\", function () {\r",
+									"   response.forEach(item => {\r",
+									"        pm.expect(item.id).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"// Verify that book id is not empty or null\r",
+									"\r",
+									"pm.test(\"Book id is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.idBook).to.be.eql(pm.environment.get(\"authorIdBook\"));\r",
+									"    });\r",
+									"});\r",
+									"// Verify items First name and Last name is string and not empty\r",
+									"pm.test(\"Item firstName is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.firstName).to.be.a('string').and.to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									"pm.test(\"Item lastName is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.lastName).to.be.a('string').and.to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/Authors/authors/books/{{authorIdBook}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Authors",
+								"authors",
+								"books",
+								"{{authorIdBook}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAuthorById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"GET\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(response).to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"// Verify the response body contains the correct data\r",
+									"pm.test(\"Author id is correct\", function () {\r",
+									"    pm.expect(response.id).to.equal(pm.environment.get(\"authorId\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/Authors/{{authorId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Authors",
+								"{{authorId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editAuthor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"PUT\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(response).to.not.be.empty;\r",
+									"});\r",
+									"let body = request.data;\r",
+									"let jsonData = JSON.parse(body);\r",
+									"pm.environment.set(\"authorId\", jsonData.id);\r",
+									"pm.environment.set(\"authorIdBook\", jsonData.idBook);\r",
+									"pm.environment.set(\"authorFirstName\", jsonData.firstName);\r",
+									"pm.environment.set(\"authorLastName\", jsonData.lastName);\r",
+									"// Verify the response body contains the correct data\r",
+									"pm.test(\"Author id is correct\", function () {\r",
+									"    pm.expect(response.id).to.equal(pm.environment.get(\"authorId\"));\r",
+									"});\r",
+									"pm.test(\"Author idBook is correct\", function () {\r",
+									"pm.expect(response.idBook).to.equal(pm.environment.get(\"authorIdBook\"));\r",
+									"});\r",
+									"pm.test(\"Author first name is correct\", function () {\r",
+									"pm.expect(response.firstName).to.equal(pm.environment.get(\"authorFirstName\"));\r",
+									"});\r",
+									"pm.test(\"Author last name is correct\", function () {\r",
+									"pm.expect(response.lastName).to.equal(pm.environment.get(\"authorLastName\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 50,\r\n  \"idBook\": 30,\r\n  \"firstName\": \"Ahmed \",\r\n  \"lastName\": \"Ali\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Authors/{{TargetAuthorId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Authors",
+								"{{TargetAuthorId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAuthor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.text();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"DELETE\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Verify that body is empty\r",
+									"pm.test(\"Response body is empty\", function () {\r",
+									"    pm.expect(response).to.be.empty;\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/Authors/{{authorId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Authors",
+								"{{authorId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "getAllBooks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"GET\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(400);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(pm.response.json()).to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"//Verify that id is not null\r",
+									"pm.test(\"Items have non-null ID\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.id).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"// Verify items title is string and not empty\r",
+									"pm.test(\"Items title is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.title).to.be.a('string').and.to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Verify items description is string and not empty\r",
+									"pm.test(\"Items description is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.description).to.be.a('string').and.to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									"// Verify items pageCount is number and not empty\r",
+									"pm.test(\"Items pageCount is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.pageCount).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"// Verify items excerpt is not null\r",
+									"pm.test(\"Items excerpt is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.excerpt).to.be.a('string').and.to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									"// Verify items publishDate is string and not empty\r",
+									"pm.test(\"Items publishDate is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.publishDate).to.be.a('string').and.to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/Books",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postNewBook",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"POST\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(pm.response.json()).to.not.be.empty;\r",
+									"});\r",
+									"let body = request.data;\r",
+									"let jsonData = JSON.parse(body);\r",
+									"pm.environment.set(\"bookId\", jsonData.id);\r",
+									"pm.environment.set(\"bookTilte\", jsonData.title);\r",
+									"pm.environment.set(\"bookDescription\", jsonData.description);\r",
+									"pm.environment.set(\"bookPageCount\", jsonData.pageCount);\r",
+									"pm.environment.set(\"bookExcerpt\", jsonData.excerpt);\r",
+									"pm.environment.set(\"bookPublishdate\", jsonData.publishDate);\r",
+									"\r",
+									"// Verify the response body contains the correct data\r",
+									"pm.test(\"Book id is correct\", function () {\r",
+									"    pm.expect(response.id).to.equal(pm.environment.get(\"bookId\"));\r",
+									"});\r",
+									"pm.test(\"Book title is correct\", function () {\r",
+									"    pm.expect(response.title).to.equal(pm.environment.get(\"bookTilte\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Book description is correct\", function () {\r",
+									"    pm.expect(response.description).to.equal(pm.environment.get(\"bookDescription\"));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Book page count is correct\", function () {\r",
+									"    pm.expect(response.pageCount).to.equal(pm.environment.get(\"bookPageCount\"));\r",
+									"});\r",
+									"pm.test(\"Book excerpt is correct\", function () {\r",
+									"    pm.expect(response.excerpt).to.equal(pm.environment.get(\"bookExcerpt\"));\r",
+									"});\r",
+									"pm.test(\"Book publish date is correct\", function () {\r",
+									"    pm.expect(response.publishDate).to.equal(pm.environment.get(\"bookPublishdate\"));\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 100,\r\n  \"title\": \"New Book\",\r\n  \"description\": \"string\",\r\n  \"pageCount\": 5,\r\n  \"excerpt\": \"string\",\r\n  \"publishDate\": \"2025-04-15T22:34:07.498Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Books",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getBookByID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"GET\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(response).to.not.be.empty;\r",
+									"});\r",
+									"// Verify the API response body contains the correct data\r",
+									"pm.test(\"Response body contains correct data\", function () {\r",
+									"    pm.expect(response.id).to.equal(parseInt(pm.environment.get(\"targetBookId\")));\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/Books/{{targetBookId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Books",
+								"{{targetBookId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editBook",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"PUT\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(response).to.not.be.empty;\r",
+									"});\r",
+									"let body = request.data;\r",
+									"let jsonData = JSON.parse(body);\r",
+									"pm.environment.set(\"bookId\", jsonData.id);\r",
+									"pm.environment.set(\"bookTilte\", jsonData.title);\r",
+									"pm.environment.set(\"bookDescription\", jsonData.description);\r",
+									"pm.environment.set(\"bookPageCount\", jsonData.pageCount);\r",
+									"pm.environment.set(\"bookExcerpt\", jsonData.excerpt);\r",
+									"pm.environment.set(\"bookPublishdate\", jsonData.publishDate)\r",
+									"\r",
+									"// Verify the response body contains the correct data\r",
+									"pm.test(\"Author id is correct\", function () {\r",
+									"    pm.expect(response.id).to.equal(pm.environment.get(\"bookId\"));\r",
+									"});\r",
+									"pm.test(\"Book tilte is correct\", function () {\r",
+									"pm.expect(response.title).to.equal(pm.environment.get(\"bookTilte\"));\r",
+									"});\r",
+									"pm.test(\"Book description is correct\", function () {\r",
+									"pm.expect(response.description).to.equal(pm.environment.get(\"bookDescription\"));\r",
+									"});\r",
+									"pm.test(\"Book page count is correct\", function () {\r",
+									"pm.expect(response.pageCount).to.equal(pm.environment.get(\"bookPageCount\"));\r",
+									"});\r",
+									"pm.test(\"Book excerpt is correct\", function () {\r",
+									"pm.expect(response.excerpt).to.equal(pm.environment.get(\"bookExcerpt\"));\r",
+									"});\r",
+									"pm.test(\"Book publish date is correct\", function () {\r",
+									"pm.expect(response.publishDate).to.equal(pm.environment.get(\"bookPublishdate\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 1,\r\n  \"title\": \"The Great Gatsby\",\r\n  \"description\": \"A novel by F. Scott Fitzgerald, set in the 1920s, about the life and times of Jay Gatsby and his unrequited love for Daisy Buchanan.\",\r\n  \"pageCount\": 180,\r\n  \"excerpt\": \"In my younger and more vulnerable years, my father gave me some advice that I've been turning over in my mind ever since.\",\r\n\"publishDate\": \"2025-04-15T22:59:11.043Z\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Books/{{targetBookId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Books",
+								"{{targetBookId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAuthor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.text();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"DELETE\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Verify that body is empty\r",
+									"pm.test(\"Response body is empty\", function () {\r",
+									"    pm.expect(response).to.be.empty;\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/Books/{{targetBookId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Books",
+								"{{targetBookId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CoverPhotos",
+			"item": [
+				{
+					"name": "getAllPhotos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"GET\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(pm.response.json()).to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"//Verify that id is not null\r",
+									"pm.test(\"Items have non-null ID\", function () {\r",
+									"    pm.response.json().forEach(item => {\r",
+									"        pm.expect(item.id).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"// Verify that book id is not empty or null\r",
+									"const response = pm.response.json();\r",
+									"pm.test(\"Book id is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.idBook).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"// Verify items url is string and not empty\r",
+									"pm.test(\"Items url is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.url).to.be.a('string').and.to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/CoverPhotos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"CoverPhotos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postNewPhoto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"POST\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(600);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(pm.response.json()).to.not.be.empty;\r",
+									"});\r",
+									"let body = request.data;\r",
+									"let jsonData = JSON.parse(body);\r",
+									"pm.environment.set(\"photoId\", jsonData.id);\r",
+									"pm.environment.set(\"bookId\", jsonData.idBook);\r",
+									"pm.environment.set(\"photoUrl\", jsonData.url);\r",
+									"// Verify the response body contains the correct data\r",
+									"pm.test(\"Photo id is correct\", function () {\r",
+									"    pm.expect(response.id).to.equal(pm.environment.get(\"photoId\"));\r",
+									"});\r",
+									"pm.test(\"Book id is correct\", function () {\r",
+									"pm.expect(response.idBook).to.equal(pm.environment.get(\"bookId\"));\r",
+									"});\r",
+									"pm.test(\"Book url is correct\", function () {\r",
+									"pm.expect(response.url).to.equal(pm.environment.get(\"photoUrl\"));\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 101,\r\n  \"idBook\": 1,\r\n  \"url\": \"https://example.com/books/the-great-gatsby\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/CoverPhotos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"CoverPhotos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPhotoByBookId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"GET\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(response).to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"//Verify that id is not null\r",
+									"pm.test(\"Items have non-null ID\", function () {\r",
+									"   response.forEach(item => {\r",
+									"        pm.expect(item.id).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"// Verify that book id is not empty or null\r",
+									"\r",
+									"pm.test(\"Book id is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.idBook).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"// Verify items First name and Last name is string and not empty\r",
+									"pm.test(\"Item url is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.url).to.be.a('string').and.to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/CoverPhotos/books/covers/{{targetBookId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"CoverPhotos",
+								"books",
+								"covers",
+								"{{targetBookId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPhotoById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"GET\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(response).to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"// Verify the response body contains the correct data\r",
+									"pm.test(\"Author id is correct\", function () {\r",
+									"    pm.expect(response.id).to.equal(parseInt(pm.environment.get(\"targetPhotoId\")));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/CoverPhotos/{{targetPhotoId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"CoverPhotos",
+								"{{targetPhotoId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editPhoto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"PUT\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(400);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(response).to.not.be.empty;\r",
+									"});\r",
+									"let body = request.data;\r",
+									"let jsonData = JSON.parse(body);\r",
+									"pm.environment.set(\"photoId\", jsonData.id);\r",
+									"pm.environment.set(\"bookId\", jsonData.idBook);\r",
+									"pm.environment.set(\"photoUrl\", jsonData.url);\r",
+									"// Verify the response body contains the correct data\r",
+									"pm.test(\"Photo id is correct\", function () {\r",
+									"    pm.expect(response.id).to.equal(pm.environment.get(\"photoId\"));\r",
+									"});\r",
+									"pm.test(\"Book id is correct\", function () {\r",
+									"pm.expect(response.idBook).to.equal(pm.environment.get(\"bookId\"));\r",
+									"});\r",
+									"pm.test(\"Book url is correct\", function () {\r",
+									"pm.expect(response.url).to.equal(pm.environment.get(\"photoUrl\"));\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 201,\r\n  \"idBook\": 1,\r\n  \"url\": \"https://library.example.com/books/1/cover.jpg\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/CoverPhotos/{{targetPhotoId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"CoverPhotos",
+								"{{targetPhotoId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletePhoto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.text();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"DELETE\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Verify that body is empty\r",
+									"pm.test(\"Response body is empty\", function () {\r",
+									"    pm.expect(response).to.be.empty;\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/CoverPhotos/{{targetPhotoId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"CoverPhotos",
+								"{{targetPhotoId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "getAllUsers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"GET\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(400);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(pm.response.json()).to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"//Verify that id is not null\r",
+									"pm.test(\"Users have non-null ID\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.id).to.not.be.null;\r",
+									"    });\r",
+									"});\r",
+									"// Verify userNames is string and not empty\r",
+									"pm.test(\"userNames is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.userName).to.be.a('string').and.to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Verify users password is string and not empty\r",
+									"pm.test(\"Users password is not empty or null\", function () {\r",
+									"    response.forEach(item => {\r",
+									"        pm.expect(item.password).to.be.a('string').and.to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/Users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postNewUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"POST\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(pm.response.json()).to.not.be.empty;\r",
+									"});\r",
+									"let body = request.data;\r",
+									"let jsonData = JSON.parse(body);\r",
+									"pm.environment.set(\"userId\", jsonData.id);\r",
+									"pm.environment.set(\"userName\", jsonData.userName);\r",
+									"pm.environment.set(\"userPassword\", jsonData.password);\r",
+									"\r",
+									"\r",
+									"\r",
+									"// Verify the response body contains the correct data\r",
+									"pm.test(\"User id is correct\", function () {\r",
+									"    pm.expect(response.id).to.equal(pm.environment.get(\"userId\"));\r",
+									"});\r",
+									"pm.test(\"Username is correct\", function () {\r",
+									"pm.expect(response.userName).to.equal(pm.environment.get(\"userName\"));\r",
+									"});\r",
+									"pm.test(\"User password is correct\", function () {\r",
+									"pm.expect(response.password).to.equal(pm.environment.get(\"userPassword\"));\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 301,\r\n  \"userName\": \"Mohammed\",\r\n  \"password\": \"mohammed123\"\r\n\r\n\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"GET\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(response).to.not.be.empty;\r",
+									"});\r",
+									"// Verify the API response body contains the correct data\r",
+									"pm.test(\"Response body contains correct data\", function () {\r",
+									"    pm.expect(response.id).to.equal(parseInt(pm.environment.get(\"targetUserId\")));\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/Users/{{targetUserId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Users",
+								"{{targetUserId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"PUT\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									"\r",
+									"// Verify the API response is JSON Format\r",
+									"pm.test(\"Content-Type is JSON in header\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8; v=1.0\");\r",
+									"});\r",
+									"//Verify that body is not empty\r",
+									"pm.test(\"Response body is not empty\", function () {\r",
+									"    pm.expect(response).to.not.be.empty;\r",
+									"});\r",
+									"let body = request.data;\r",
+									"let jsonData = JSON.parse(body);\r",
+									"pm.environment.set(\"userId\", jsonData.id);\r",
+									"pm.environment.set(\"userName\", jsonData.userName);\r",
+									"pm.environment.set(\"userPassword\", jsonData.password);\r",
+									"\r",
+									"// Verify the response body contains the correct data\r",
+									"pm.test(\"User id is correct\", function () {\r",
+									"    pm.expect(response.id).to.equal(pm.environment.get(\"userId\"));\r",
+									"});\r",
+									"pm.test(\"Username is correct\", function () {\r",
+									"pm.expect(response.userName).to.equal(pm.environment.get(\"userName\"));\r",
+									"});\r",
+									"pm.test(\"User password is correct\", function () {\r",
+									"pm.expect(response.password).to.equal(pm.environment.get(\"userPassword\"));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 301,\r\n  \"userName\": \"Ahmed\",\r\n  \"password\": \"ahmed123\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Users/{{targetUserId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Users",
+								"{{targetUserId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.text();\r",
+									"// Verify the request method is GET\r",
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.actualMethod = pm.request.method;\r",
+									"    pm.expect(pm.actualMethod).to.eq(\"DELETE\");\r",
+									"});\r",
+									"\r",
+									"// Verify the API Response status code is 200 OK\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//Verify that body is empty\r",
+									"pm.test(\"Response body is empty\", function () {\r",
+									"    pm.expect(response).to.be.empty;\r",
+									"});\r",
+									"pm.test(\"Response time is less than 300ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/Users/{{targetUserId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Users",
+								"{{targetUserId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
